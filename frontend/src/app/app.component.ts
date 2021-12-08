@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   // result of the BFS or DFS
   suggestions = [];
 
+  // delete later
   value = "";
 
   ngOnInit() {
@@ -35,7 +36,6 @@ export class AppComponent implements OnInit {
   }
 
   filter(event: any) {
-
     this.filteredOptions = _.filter(this.options, function(option) {return option.includes(event.target.value)});
   }
 
