@@ -23,19 +23,11 @@ export interface Item {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  // variable to store all of the amazon items
-  options = ["hello", "world", "hello world", "frank", "super"];
-  // variable to store the items available
   metadata = new Map<string, Item>();
-  // variable to store the graph
   graph = new Map<string, string[]>();
-  // varible to store the auto complete search
-  filteredOptions: string[] = [];
-  // result of the BFS or DFS
-  suggestions = [];
 
-  // delete later
-  value = "";
+  filteredOptions: Item[] = [];
+  suggestions = [];
 
   constructor(private httpClient: HttpClient) {}
 
@@ -46,6 +38,10 @@ export class AppComponent implements OnInit {
       result.forEach(meta => {
         this.metadata.set(meta[0], meta[1]);
       });
+      let it = [...this.metadata.values()];
+      for (let index = 0; index < 5; index++) {
+        this.filteredOptions.push(it[index]);
+      }
     });
 
     // puts the graph.json into a map
@@ -54,28 +50,35 @@ export class AppComponent implements OnInit {
       result.forEach(list => {
         this.graph.set(list[0], list[1]);
       });
-      console.log(this.graph.get("1"));
-      
     });
-
-    this.filteredOptions = this.options;
   }
 
-  DFS(): void {
+  DFS(source: Item): void {
 
   }
 
-  BFS(): void {
+  BFS(source: Item): void {
 
+  }
+
+  getOptionDisplay(option: Item) {
+    return option.title;
   }
 
   selection(event: any) {
-    this.value = event.option.value;
+    let item: Item = event.option.value;
   }
 
   filter(event: any) {
     let value: string = event.target.value;
-    this.filteredOptions = _.filter(this.options, function(option) {return option.toLowerCase().includes(value.toLowerCase())});
+    // this.filteredOptions = [...this.metadata.values()].reduce(function(val) {
+    //   if (val.title.toLowerCase().includes(value.toLowerCase())) {
+    //     acc.push(val);
+    //   }
+    // })
+    //this.filteredOptions = _.filter(this.options, function(option) {return option.toLowerCase().includes(value.toLowerCase())});
+    //this.filteredOptions = _.filter([...this.metadata.values()], function(option) {return option.title.toLowerCase().includes(value.toLowerCase())});
+    
   }
 
 }

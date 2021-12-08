@@ -6,9 +6,10 @@
            [matAutocomplete] = "auto"
            matInput
            (input)="filter($event)">
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selection($event)">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selection($event)"
+                      [displayWith]="getOptionDisplay">
       <mat-option *ngFor="let option of filteredOptions" [value]="option">
-        {{ option }}
+        {{ option.title }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
