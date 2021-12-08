@@ -1,1 +1,18 @@
-<div>App Works</div>
+<form>
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input type="search"
+           placeholder="Search an Item"
+           [matAutocomplete] = "auto"
+           matInput>
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selection($event)">
+      <mat-option *ngFor="let option of options" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
+
+<div *ngIf = "value">
+  {{value}}
+</div>

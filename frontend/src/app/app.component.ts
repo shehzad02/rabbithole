@@ -8,13 +8,15 @@ import * as _ from "underscore";
 })
 export class AppComponent implements OnInit {
   // variable to store all of the amazon items
-  options = {};
+  options = ["hello", "world", "hello world"];
   // variable to store the adjacency list
   graph = {};
   // varible to store the auto complete search
   filteredOptions = {};
   // result of the BFS or DFS
   suggestions = [];
+
+  value = "";
 
   ngOnInit() {
 
@@ -26,6 +28,10 @@ export class AppComponent implements OnInit {
 
   BFS(): void {
 
+  }
+
+  selection(event: any) {
+    this.value = event.option.value;
   }
 
 }
