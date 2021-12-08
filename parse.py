@@ -2,6 +2,7 @@ import math
 import sys
 import time
 import logging
+from typing import List, Any
 
 
 class Item:
@@ -14,11 +15,9 @@ class Item:
     avg_rating: float
 
 
-metadata: dict = {}
-graph: list[list[str]]
+def parse_metadata(metadata_path='./data/amazon-meta.txt') -> dict[str, Item]:
+    metadata = {}
 
-
-def parse_metadata(metadata_path='./data/amazon-meta.txt'):
     logging.info(f'Opening {metadata_path}')
     with open(metadata_path, 'r') as f:
         lines = f.readlines()
@@ -46,10 +45,10 @@ def parse_metadata(metadata_path='./data/amazon-meta.txt'):
         elif line.startswith('ASIN:'):
             not_discontinued_items += 1
 
-            metadata[curr_id].asin = lines[i].split()[1]
-            metadata[curr_id].title = lines[i + 1].split(' ', 1)[1]
-            metadata[curr_id].group = lines[i + 2].split(' ', 1)[1]
-            metadata[curr_id].salesrank = int(lines[i + 3].split()[1])
+            metadata[curr_id].asin = lines[i].strip().split()[1]
+            metadata[curr_id].title = lines[i + 1].strip().split(' ', 1)[1]
+            metadata[curr_id].group = lines[i + 2].strip().split(' ', 1)[1]
+            metadata[curr_id].salesrank = int(lines[i + 3].strip().split()[1])
             metadata[curr_id].similar = lines[i + 4].strip().split()[2:]
 
             # Advance i to reviews section
@@ -67,16 +66,17 @@ def parse_metadata(metadata_path='./data/amazon-meta.txt'):
         i += 1
 
     logging.info(f'Total items: {num_items}\nDiscontinued items: {discontinued_items}')
+    return metadata
 
 
-def parse_graph(graph_path='./data/amazon0601.txt'):
+def parse_graph(metadata=None, graph_path='./data/amazon0601.txt') -> List[List[str]]:
     logging.info(f'Opening {graph_path}')
     with open(graph_path, 'r') as f:
         data = f.readlines()
     logging.info(f'Read {graph_path}')
 
     highest: int = int(data[-1].strip().split()[0])
-    graph = [[] for _ in range(highest+1)]
+    graph = [[] for _ in range(highest + 1)]
     i = 0
     for line in data[4:]:
         frm, to = [x for x in line.strip().split()]
@@ -86,11 +86,16 @@ def parse_graph(graph_path='./data/amazon0601.txt'):
         graph[int(frm)].append(to)
 
     logging.info(f'Parsed {i} edges')
-
+    return graph
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     logging.info('Started program')
-    parse_metadata()
-    parse_graph()
+    metadata = parse_metadata()
+    graph = parse_graph(metadata)
+
+    print(f"Metadata for item with ID 100: {vars(metadata['100'])}")
+    print(f"Edges from item with ID 100: {graph[100]}")
+    logging.info('Done')
+
