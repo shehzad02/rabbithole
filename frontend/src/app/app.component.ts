@@ -54,11 +54,11 @@ export class AppComponent implements OnInit {
   }
 
   DFS(source: Item): void {
-
+    
   }
 
   BFS(source: Item): void {
-
+    
   }
 
   getOptionDisplay(option: Item) {
@@ -67,6 +67,7 @@ export class AppComponent implements OnInit {
 
   selection(event: any) {
     let item: Item = event.option.value;
+    
   }
 
   filter(event: any) {
