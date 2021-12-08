@@ -40,7 +40,7 @@ class Parser:
         self.metadata = {}
 
         logging.info(f'Opening {metadata_path}')
-        with open(metadata_path, 'r') as f:
+        with open(metadata_path, 'r', encoding='utf-8', errors='ignore') as f:
             lines = f.readlines()
         logging.info(f'Read {metadata_path}')
 
@@ -93,7 +93,7 @@ class Parser:
 
     def parse_graph(self, graph_path='./data/amazon0601.txt') -> None:
         logging.info(f'Opening {graph_path}')
-        with open(graph_path, 'r') as f:
+        with open(graph_path, 'r', encoding='utf-8', errors='ignore') as f:
             data = f.readlines()
         logging.info(f'Read {graph_path}')
 
