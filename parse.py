@@ -3,10 +3,12 @@ import sys
 import time
 import logging
 import json
-from typing import List, Any
+from typing import List, Dict
 
 
 class Item:
+    """An Amazon item. Contains an item's properties like title and avg. rating, and a list of nodes it links to."""
+
     id: str
     asin: str
     title: str
@@ -15,12 +17,19 @@ class Item:
     num_ratings: int
     avg_rating: float
     similar_items: List[str]
-    recommendations_from_here: list[str] = None
+    recommendations_from_here: List[str] = None
 
 
 class Parser:
-    metadata: dict[str, Item] = None
-    graph: dict[str, List[str]] = None
+    """
+    Parses and holds parsed data from amazon-meta.txt and amazon0601.txt, and allows dumping to JSON.
+
+    Creates and holds metadata and graph dictionaries:
+    Metadata links an item ID to an Item object, which contains attributes and a list of the nodes it connects to.
+    Graph links an item ID to just a list of the nodes it connects to. Graph is a subset of metadata. """
+
+    metadata: Dict[str, Item] = None
+    graph: Dict[str, List[str]] = None
 
     INCLUDE_GRAPH_IN_METADATA: bool = True
 
