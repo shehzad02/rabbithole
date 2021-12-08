@@ -25,8 +25,10 @@ export interface Item {
 export class AppComponent implements OnInit {
   // variable to store all of the amazon items
   options = ["hello", "world", "hello world", "frank", "super"];
-  // variable to store the adjacency list
+  // variable to store the items available
   metadata = new Map<string, Item>();
+  // variable to store the graph
+  graph = new Map<string, string[]>();
   // varible to store the auto complete search
   filteredOptions: string[] = [];
   // result of the BFS or DFS
@@ -38,14 +40,23 @@ export class AppComponent implements OnInit {
   constructor(private httpClient: HttpClient) {}
 
   ngOnInit() {
+    // puts the metadata.json into a map
     this.httpClient.get("assets/metadata.json").subscribe(data => {
       const result = Object.entries(data);
       result.forEach(meta => {
         this.metadata.set(meta[0], meta[1]);
       });
-      console.log(this.metadata.get("1")?.title);
+    });
+
+    // puts the graph.json into a map
+    this.httpClient.get("assets/graph.json").subscribe(adjList => {
+      const result = Object.entries(adjList);
+      result.forEach(list => {
+        this.graph.set(list[0], list[1]);
+      });
+      console.log(this.graph.get("1"));
       
-    })
+    });
 
     this.filteredOptions = this.options;
   }
