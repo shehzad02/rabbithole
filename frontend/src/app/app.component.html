@@ -4,15 +4,16 @@
     <input type="search"
            placeholder="Search an Item"
            [matAutocomplete] = "auto"
-           matInput>
+           matInput
+           (input)="filter($event)">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selection($event)">
-      <mat-option *ngFor="let option of options" [value]="option">
+      <mat-option *ngFor="let option of filteredOptions" [value]="option">
         {{ option }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 </form>
 
-<div *ngIf = "value">
-  {{value}}
+<div *ngIf = "filteredOptions.length == 0">
+  There are no matching search results. Try Something else.
 </div>
