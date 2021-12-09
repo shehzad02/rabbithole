@@ -104,6 +104,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     } else {
       this.DFS(item);
     }
+    this.loadChart();
   }
 
   filter(event: any) {
@@ -155,7 +156,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     series.links.template.distance = 2;
     series.nodes.template.label.text = "{name}";
     series.nodes.template.label.wrap = true;
-    series.nodes.template.tooltipText = "[bold]{value}[/]";
+    // series.nodes.template.tooltipText = "[bold]{value}[/]";
     series.fontSize = 10;
     series.minRadius = 30;
     // series.maxRadius = 40;
