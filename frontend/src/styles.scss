@@ -1,4 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+    //margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: rgba($color: #e7e7e7, $alpha: 1.0);
+}
+
+.search-bar {
+    width: 530px;
+    margin: 1rem;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.item-card {
+    width: 500px;
+    margin: 1rem;
+    background-color: rgba($color: #ffffff, $alpha: 1.0);
+}
+
+.item-header {
+    margin: 1rem;
+    margin-bottom: 2rem;
+}
+
+.mat-button {
+    background-color: rgba($color: #ebebeb, $alpha: 1.0);
+}
