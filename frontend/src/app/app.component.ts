@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import * as _ from "underscore";
 import * as internal from 'stream';
+
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 
 
 export interface Item {
@@ -22,7 +26,7 @@ export interface Item {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   metadata = new Map<string, Item>();
   graph = new Map<string, string[]>();
 
@@ -56,6 +60,10 @@ export class AppComponent implements OnInit {
         this.graph.set(list[0], list[1]);
       });
     });
+  }
+
+  ngAfterViewInit(): void {
+      
   }
 
   DFS(source: Item): void {
