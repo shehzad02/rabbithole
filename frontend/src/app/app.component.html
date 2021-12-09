@@ -2,7 +2,7 @@
 
   <mat-form-field class="full-width" appearance="fill">
 
-    <mat-label>Search</mat-label>
+    <mat-label>Search a Book or Music</mat-label>
     <input type="search"
           placeholder="Search an Item"
           [matAutocomplete] = "auto"
@@ -20,8 +20,8 @@
   </mat-form-field>
 
   <mat-slide-toggle [(ngModel)]="isChecked" name="toggle">
-    <span *ngIf="!isChecked">Deapth First Search</span>
-    <span *ngIf="isChecked">Breath First Search</span>
+    <span *ngIf="!isChecked">Edge List</span>
+    <span *ngIf="isChecked">Adjacency List</span>
   </mat-slide-toggle>
 
 </form>
@@ -31,7 +31,7 @@
 </div>
 
 <div class="column">
-  <div style="overflow-y: scroll; width: 900px;">
+  <div style="overflow-y: auto; width: 900px;">
     <mat-card *ngFor="let item of suggestions" class="item-card">
       <!-- <mat-card-header> -->
         <mat-card-title>{{ item.title }}</mat-card-title>

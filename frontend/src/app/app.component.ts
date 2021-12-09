@@ -157,7 +157,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     series.nodes.template.label.text = "{name}";
     series.nodes.template.label.wrap = true;
     // series.nodes.template.tooltipText = "[bold]{value}[/]";
-    series.fontSize = 10;
+    series.fontSize = 15;
     series.minRadius = 30;
     // series.maxRadius = 40;
   }
