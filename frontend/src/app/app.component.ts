@@ -106,10 +106,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     visited.add(source.id);
     q.push(source.id);
 
-    while (q.length > 0 || count == 20) {
+    while (q.length > 0) {
       let u = q[0];
       this.suggestions.push(this.metadata.get(q[0])!);
       count++;
+      if (count == 20) {
+        break;
+      }
       q.shift();
       let neighbors : string[] = this.adjGraph.get(u)!;
       for (let v = 0; v < neighbors.length; v++) {
