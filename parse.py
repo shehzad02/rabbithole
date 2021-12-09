@@ -29,7 +29,9 @@ class Parser:
     """
 
     metadata: Dict[str, Item] = None
-    graph: Dict[str, List[str]] = None
+
+    graph_adj: Dict[str, List[str]] = None
+    graph_edgelist: List[List[str]] = None
 
     INCLUDE_GRAPH_IN_METADATA: bool
 
@@ -110,7 +112,8 @@ class Parser:
             data = f.readlines()
         logging.info(f'Finished reading {graph_path}')
 
-        self.graph = {}
+        self.graph_adj = {}
+        self.graph_edgelist = []
         i = d = 0
         logging.info(f'Building graph from {len(data)} lines of {graph_path}')
         for line in data[4:]:
@@ -119,16 +122,21 @@ class Parser:
                 d += 1
                 continue
 
+            # Add edge to metadata dictionary
             if self.INCLUDE_GRAPH_IN_METADATA:
                 if self.metadata[frm].recommendations_from_here:
                     self.metadata[frm].recommendations_from_here.append(to)
                 else:
                     self.metadata[frm].recommendations_from_here = [to]
 
-            if frm not in self.graph:
-                self.graph[frm] = [to]
+            # Add edge to graph_adj
+            if frm not in self.graph_adj:
+                self.graph_adj[frm] = [to]
             else:
-                self.graph[frm].append(to)
+                self.graph_adj[frm].append(to)
+
+            # Add edge to graph_edgelist
+            self.graph_edgelist.append([frm, to])
 
             i += 1
 
@@ -144,13 +152,20 @@ class Parser:
         with open(metadata_json_path, 'w') as f:
             json.dump(reformed_metadata, f, indent=4)
 
-    def dump_graph_json(self, graph_json_path='./frontend/src/assets/graph.json'):
-        """Writes JSON representation of graph to graph_json_path"""
+    def dump_graph_json(self, graph_json_path='./frontend/src/assets/', ):
+        """Writes JSON representation of edgelist and adjacency list graphs to graph_json_path"""
 
-        logging.info(f'Writing graph to JSON file {graph_json_path}')
+        # Write adjacency list
+        adj_path = graph_json_path + 'graph-adj.json'
+        logging.info(f'Writing graph to JSON file {adj_path}')
+        with open(adj_path, "w") as f:
+            json.dump(self.graph_adj, f, indent=4)
 
-        with open(graph_json_path, "w") as f:
-            json.dump(self.graph, f, indent=4)
+        # Write edgelist
+        edgelist_path = graph_json_path + 'graph-edgelist.json'
+        logging.info(f'Writing graph to JSON file {edgelist_path}')
+        with open(edgelist_path, "w") as f:
+            json.dump(self.graph_edgelist, f, indent=4)
 
 
 if __name__ == '__main__':
@@ -166,6 +181,7 @@ if __name__ == '__main__':
     p.dump_graph_json()
 
     print(f"Metadata for item with ID 100: {vars(p.metadata['100'])}")
-    print(f"Edges from item with ID 100: {p.graph['100']}")
+    print(f"Edges from item with ID 100: {p.graph_adj['100']}")
+    print(f"Edge from edgelist index 100: {p.graph_edgelist[100]}")
 
     logging.info('Done')
