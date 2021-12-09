@@ -27,7 +27,10 @@ export class AppComponent implements OnInit {
   graph = new Map<string, string[]>();
 
   filteredOptions: Item[] = [];
-  suggestions = [];
+  suggestions: any = [];
+  source: any;
+
+  isChecked: boolean = false;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -42,6 +45,8 @@ export class AppComponent implements OnInit {
       for (let index = 0; index < 5; index++) {
         this.filteredOptions.push(it[index]);
       }
+      // temporary
+      this.suggestions = this.filteredOptions;
     });
 
     // puts the graph.json into a map
@@ -67,19 +72,38 @@ export class AppComponent implements OnInit {
 
   selection(event: any) {
     let item: Item = event.option.value;
-    
+    this.source = item;
+    if (this.isChecked) {
+      this.BFS(item);
+    } else {
+      this.DFS(item);
+    }
+  }
+
+  viewItem(item: Item) {
+    this.source = item;
+    if (this.isChecked) {
+      this.BFS(item);
+    } else {
+      this.DFS(item);
+    }
   }
 
   filter(event: any) {
     let value: string = event.target.value;
-    // this.filteredOptions = [...this.metadata.values()].reduce(function(val) {
-    //   if (val.title.toLowerCase().includes(value.toLowerCase())) {
-    //     acc.push(val);
-    //   }
-    // })
-    //this.filteredOptions = _.filter(this.options, function(option) {return option.toLowerCase().includes(value.toLowerCase())});
-    //this.filteredOptions = _.filter([...this.metadata.values()], function(option) {return option.title.toLowerCase().includes(value.toLowerCase())});
-    
+    let count = 0;
+    this.filteredOptions = [];
+    let items = [...this.metadata.values()];
+   
+    for (let index = 0; index < items.length; index++) {
+      if (items[index].title.toLowerCase().includes(value.toLowerCase())) {
+        count++;
+        this.filteredOptions.push(items[index]);
+      }
+      if (count === 10) {
+        break;
+      } 
+    }
   }
 
 }
