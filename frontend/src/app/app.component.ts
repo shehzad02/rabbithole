@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   graph = new Map<string, string[]>();
 
   filteredOptions: Item[] = [];
-  suggestions = [];
+  suggestions: any = [];
 
   constructor(private httpClient: HttpClient) {}
 
@@ -42,6 +42,8 @@ export class AppComponent implements OnInit {
       for (let index = 0; index < 5; index++) {
         this.filteredOptions.push(it[index]);
       }
+      // temporary
+      this.suggestions = this.filteredOptions;
     });
 
     // puts the graph.json into a map
