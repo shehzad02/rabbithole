@@ -1,7 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # json metadata and graph
-graph.json
+graph-adj.json
+graph-edgelist.json
 metadata.json
 
 # compiled output

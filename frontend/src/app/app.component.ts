@@ -35,7 +35,8 @@ export interface Node {
 })
 export class AppComponent implements OnInit, AfterViewInit {
   metadata = new Map<string, Item>();
-  graph = new Map<string, string[]>();
+  adjGraph = new Map<string, string[]>();
+  edgeGraph: any[] = [];
 
   filteredOptions: Item[] = [];
   suggestions: Item[] = [];
@@ -62,10 +63,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     // puts the graph.json into a map
-    this.httpClient.get("assets/graph.json").subscribe(adjList => {
+    this.httpClient.get("assets/graph-adj.json").subscribe(adjList => {
       const result = Object.entries(adjList);
       result.forEach(list => {
-        this.graph.set(list[0], list[1]);
+        this.adjGraph.set(list[0], list[1]);
+      });
+    });
+
+    this.httpClient.get("assets/graph-edgelist.json").subscribe(edgeList => {
+      const result = Object.entries(edgeList);
+      result.forEach(edge => {
+        this.edgeGraph.push(edge[1]);
       });
     });
   }
