@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import * as _ from "underscore";
 import * as internal from 'stream';
+
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
+import * as forceDirected from "@amcharts/amcharts4/plugins/forceDirected";
 
 
 export interface Item {
@@ -16,18 +20,25 @@ export interface Item {
   recommendations_from_here: string[];
 }
 
+export interface Node {
+  name: string;
+  id: string;
+  linkWith: string[];
+  value: number;
+}
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   metadata = new Map<string, Item>();
   graph = new Map<string, string[]>();
 
   filteredOptions: Item[] = [];
-  suggestions: any = [];
+  suggestions: Item[] = [];
   source: any;
 
   isChecked: boolean = false;
@@ -47,6 +58,7 @@ export class AppComponent implements OnInit {
       }
       // temporary
       this.suggestions = this.filteredOptions;
+      this.loadChart();
     });
 
     // puts the graph.json into a map
@@ -56,6 +68,10 @@ export class AppComponent implements OnInit {
         this.graph.set(list[0], list[1]);
       });
     });
+  }
+
+  ngAfterViewInit(): void {
+      
   }
 
   DFS(source: Item): void {
@@ -78,6 +94,7 @@ export class AppComponent implements OnInit {
     } else {
       this.DFS(item);
     }
+    this.loadChart();
   }
 
   viewItem(item: Item) {
@@ -87,6 +104,7 @@ export class AppComponent implements OnInit {
     } else {
       this.DFS(item);
     }
+    this.loadChart();
   }
 
   filter(event: any) {
@@ -104,6 +122,44 @@ export class AppComponent implements OnInit {
         break;
       } 
     }
+  }
+
+  loadChart() {
+    let chart = am4core.create('chartdiv',forceDirected.ForceDirectedTree);
+    let series = chart.series.push(new forceDirected.ForceDirectedSeries);
+    let data: any[] = [];
+    this.suggestions.forEach(item => {
+      data.push({
+        "name": item.title,
+        "id": item.id,
+        "value": 10,
+        "linkWith": item.recommendations_from_here
+      });
+    });
+
+    if (this.source) {
+      data.push({
+        "name": this.source.title,
+        "id": this.source.id,
+        "value": 20,
+        "linkWith": this.source.recommendations_from_here
+      })
+    }
+
+    series.data = data;
+
+    series.dataFields.name = "name";
+    series.dataFields.id = "id";
+    series.dataFields.value = "value";
+    series.dataFields.linkWith = "linkWith";
+
+    series.links.template.distance = 2;
+    series.nodes.template.label.text = "{name}";
+    series.nodes.template.label.wrap = true;
+    // series.nodes.template.tooltipText = "[bold]{value}[/]";
+    series.fontSize = 15;
+    series.minRadius = 30;
+    // series.maxRadius = 40;
   }
 
 }
