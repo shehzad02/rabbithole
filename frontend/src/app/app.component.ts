@@ -6,6 +6,7 @@ import * as internal from 'stream';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as forceDirected from "@amcharts/amcharts4/plugins/forceDirected";
+import { QueueScheduler } from 'rxjs/internal/scheduler/QueueScheduler';
 
 
 export interface Item {
@@ -82,12 +83,42 @@ export class AppComponent implements OnInit, AfterViewInit {
     
   }
 
-  DFS(source: Item): void {
+  BFSEdge(source: Item): void {
+    this.suggestions = [];
     
   }
 
-  BFS(source: Item): void {
-    
+  BFSAdj(source: Item): void {
+    // metadata = new Map<string, Item>()
+    // key = vertex ID (string), value = Item object
+
+    // adjGraph = new Map<string, string[]>()
+    // key = vertex ID (string), value = adjacent nodes
+
+    // q array is the queue: use push to enqueue, shift to dequeue
+    // this.suggestions array is used for identifying vertices
+    this.suggestions = [];
+
+    let count = 0;
+    let q : string[] = [];
+    const visited = new Set();
+
+    visited.add(source.id);
+    q.push(source.id);
+
+    while (q.length > 0 || count == 20) {
+      let u = q[0];
+      this.suggestions.push(this.metadata.get(q[0])!);
+      count++;
+      q.shift();
+      let neighbors : string[] = this.adjGraph.get(u)!;
+      for (let v = 0; v < neighbors.length; v++) {
+        if (!visited.has(neighbors[v])) {
+          visited.add(neighbors[v]);
+          q.push(neighbors[v]);
+        }
+      }
+    }
   }
 
   getOptionDisplay(option: Item) {
