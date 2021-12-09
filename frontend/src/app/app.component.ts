@@ -28,6 +28,9 @@ export class AppComponent implements OnInit {
 
   filteredOptions: Item[] = [];
   suggestions: any = [];
+  source: any;
+
+  isChecked: boolean = false;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -69,7 +72,21 @@ export class AppComponent implements OnInit {
 
   selection(event: any) {
     let item: Item = event.option.value;
-    
+    this.source = item;
+    if (this.isChecked) {
+      this.BFS(item);
+    } else {
+      this.DFS(item);
+    }
+  }
+
+  viewItem(item: Item) {
+    this.source = item;
+    if (this.isChecked) {
+      this.BFS(item);
+    } else {
+      this.DFS(item);
+    }
   }
 
   filter(event: any) {
@@ -77,13 +94,7 @@ export class AppComponent implements OnInit {
     let count = 0;
     this.filteredOptions = [];
     let items = [...this.metadata.values()];
-    // this.filteredOptions = [...this.metadata.values()].reduce(function(val) {
-    //   if (val.title.toLowerCase().includes(value.toLowerCase())) {
-    //     acc.push(val);
-    //   }
-    // })
-    //this.filteredOptions = _.filter(this.options, function(option) {return option.toLowerCase().includes(value.toLowerCase())});
-    //this.filteredOptions = _.filter([...this.metadata.values()], function(option) {return option.title.toLowerCase().includes(value.toLowerCase())});
+   
     for (let index = 0; index < items.length; index++) {
       if (items[index].title.toLowerCase().includes(value.toLowerCase())) {
         count++;
