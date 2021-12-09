@@ -135,7 +135,7 @@ class Parser:
         logging.info(f'Finished building graph from {len(data)} lines of {graph_path}')
         logging.info(f'Read {i} edges, skipped {d} of them (one or both nodes were discontinued)')
 
-    def dump_metadata_json(self, metadata_json_path='./data/metadata.json'):
+    def dump_metadata_json(self, metadata_json_path='./frontend/src/assets/metadata.json'):
         """Writes JSON representation of metadata to metadata_json_path"""
 
         logging.info(f'Writing metadata to JSON file {metadata_json_path}')
@@ -144,12 +144,12 @@ class Parser:
         with open(metadata_json_path, 'w') as f:
             json.dump(reformed_metadata, f, indent=4)
 
-    def dump_graph_json(self, graph_json_path='./data/graph.json'):
+    def dump_graph_json(self, graph_json_path='./frontend/src/assets/graph.json'):
         """Writes JSON representation of graph to graph_json_path"""
 
         logging.info(f'Writing graph to JSON file {graph_json_path}')
 
-        with open("./data/graph.json", "w") as f:
+        with open(graph_json_path, "w") as f:
             json.dump(self.graph, f, indent=4)
 
 
