@@ -21,48 +21,57 @@ class Item:
 
 
 class Parser:
-    """
-    Parses and holds parsed data from amazon-meta.txt and amazon0601.txt, and allows dumping to JSON.
+    """Parses and holds parsed data from amazon-meta.txt and amazon0601.txt, and allows dumping to JSON.
 
     Creates and holds metadata and graph dictionaries:
     Metadata links an item ID to an Item object, which contains attributes and a list of the nodes it connects to.
-    Graph links an item ID to just a list of the nodes it connects to. Graph is a subset of metadata. """
+    Graph links an item ID to just a list of the nodes it connects to. Graph is a subset of metadata.
+    """
 
     metadata: Dict[str, Item] = None
     graph: Dict[str, List[str]] = None
 
-    INCLUDE_GRAPH_IN_METADATA: bool = True
+    INCLUDE_GRAPH_IN_METADATA: bool
 
     def __init__(self, include_graph_in_metadata=True):
+        """Includes one option for whether adjacencies should be stored in metadata (True), or just in the graph."""
+
         self.INCLUDE_GRAPH_IN_METADATA = include_graph_in_metadata
 
     def parse_metadata(self, metadata_path='./data/amazon-meta.txt') -> None:
+        """Parses data from metadata_path into metadata dictionary."""
+
         self.metadata = {}
 
         logging.info(f'Opening {metadata_path}')
         with open(metadata_path, 'r', encoding='utf-8', errors='ignore') as f:
-            lines = f.readlines()
+            lines: List[str] = f.readlines()  # Reads whole file into a list of lines
         logging.info(f'Read {metadata_path}')
 
+        logging.info(f'Building metadata dictionary from {len(lines)} lines of {metadata_path}')
         curr_id = None
         discontinued_items: int = 0
         not_discontinued_items: int = 0
-        num_items: int = 0
+        total_items: int = 0
         i: int = 0
+
         while i < len(lines):
             line = lines[i].strip()
-            if line.startswith('Id:'):
-                num_items += 1
+            if line.startswith('Id:'):  # New item
+                total_items += 1
+
+                # If discontinued, skip to next item
                 if lines[i + 2].strip().startswith('discontinued'):
-                    # logging.info(f'Skipped discontinued item. {line}')
                     discontinued_items += 1
-                    i += 4  # Move to next item
+                    i += 4  # Skip to next item
                     continue
 
+                # Else make a new Item object corresponding to the new ID
                 curr_id = line.strip().split()[1]
                 self.metadata[curr_id] = Item()
                 i += 1
                 continue
+
             elif line.startswith('ASIN:'):
                 not_discontinued_items += 1
 
@@ -89,16 +98,21 @@ class Parser:
 
             i += 1
 
-        logging.info(f'Total items: {num_items}\nDiscontinued items: {discontinued_items}')
+        logging.info(f'Finished building metadata dictionary from {len(lines)} lines of {metadata_path}')
+
+        logging.info(f'Total items: {total_items}, Discontinued items: {discontinued_items}')
 
     def parse_graph(self, graph_path='./data/amazon0601.txt') -> None:
+        """Parses data from graph_path into graph (adjacency list)."""
+
         logging.info(f'Opening {graph_path}')
         with open(graph_path, 'r', encoding='utf-8', errors='ignore') as f:
             data = f.readlines()
-        logging.info(f'Read {graph_path}')
+        logging.info(f'Finished reading {graph_path}')
 
         self.graph = {}
         i = d = 0
+        logging.info(f'Building graph from {len(data)} lines of {graph_path}')
         for line in data[4:]:
             frm, to = [x for x in line.strip().split()]
             if self.metadata and (frm not in self.metadata or to not in self.metadata):
@@ -118,14 +132,23 @@ class Parser:
 
             i += 1
 
+        logging.info(f'Finished building graph from {len(data)} lines of {graph_path}')
         logging.info(f'Read {i} edges, skipped {d} of them (one or both nodes were discontinued)')
 
-    def dump_metadata_json(self):
+    def dump_metadata_json(self, metadata_json_path='./data/metadata.json'):
+        """Writes JSON representation of metadata to metadata_json_path"""
+
+        logging.info(f'Writing metadata to JSON file {metadata_json_path}')
+
         reformed_metadata = {key: vars(val) for (key, val) in self.metadata.items()}
-        with open("./data/metadata.json", "w") as f:
+        with open(metadata_json_path, 'w') as f:
             json.dump(reformed_metadata, f, indent=4)
 
-    def dump_graph_json(self):
+    def dump_graph_json(self, graph_json_path='./data/graph.json'):
+        """Writes JSON representation of graph to graph_json_path"""
+
+        logging.info(f'Writing graph to JSON file {graph_json_path}')
+
         with open("./data/graph.json", "w") as f:
             json.dump(self.graph, f, indent=4)
 
