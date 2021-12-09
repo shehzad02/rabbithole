@@ -22,6 +22,7 @@
   <mat-slide-toggle [(ngModel)]="isChecked" name="toggle">
     <span *ngIf="!isChecked">Edge List</span>
     <span *ngIf="isChecked">Adjacency List</span>
+    <span *ngIf="searchTime != 0"> Time taken to search: {{ searchTime }}ms</span>
   </mat-slide-toggle>
 
 </form>
@@ -31,7 +32,7 @@
 </div>
 
 <div class="column">
-  <div style="overflow-y: auto; width: 900px;">
+  <div style="overflow-y: auto; width: 900px; height: 1000px;">
     <mat-card *ngFor="let item of suggestions" class="item-card">
       <!-- <mat-card-header> -->
         <mat-card-title>{{ item.title }}</mat-card-title>
