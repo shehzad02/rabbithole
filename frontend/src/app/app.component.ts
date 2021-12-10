@@ -84,8 +84,17 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   BFSEdge(source: Item): void {
+    // metadata = new Map<string, Item>()
+    // key = vertex ID (string), value = Item object
+    // edgeGraph: any[] = [];
     this.suggestions = [];
-    
+
+    let count = 0;
+    let q : string[] = [];
+    const visited = new Set();
+
+    visited.add(source.id);
+    q.push(source.id);
   }
 
   BFSAdj(source: Item): void {
