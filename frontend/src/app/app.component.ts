@@ -80,8 +80,48 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   BFSEdge(source: Item): void {
+    // metadata = new Map<string, Item>()
+    // key = vertex ID (string), value = Item object
+    // edgeGraph: any[] = [];
+
+    // search through all edges find source (from) node
+    // find to node that has not been visited
+    let startTime = new Date().getTime();
     this.suggestions = [];
-    
+
+    let count = 0;
+    let q : string[] = [];
+    const visited = new Set();
+
+    visited.add(source.id);
+    q.push(source.id);
+
+    while (q.length > 0) {
+      let from = q[0];
+      this.suggestions.push(this.metadata.get(q[0])!);
+      count++;
+      if (count == 20) {
+        break;
+      }
+      q.shift();
+      let neighbors : string[] = [];
+
+      // iterate through edgeList to find 'to' vertices from 'from' vertex
+      for (let i = 0; i < this.edgeGraph.length; i++) {
+        if (this.edgeGraph[i][0] == from) {
+          neighbors.push(this.edgeGraph[i][1]);
+        }
+      }
+
+      for (let v = 0; v < neighbors.length; v++) {
+        if (!visited.has(neighbors[v])) {
+          visited.add(neighbors[v]);
+          q.push(neighbors[v]);
+        }
+      }
+    }
+    let endTime = new Date().getTime();
+    this.searchTime = endTime - startTime;
   }
 
   BFSAdj(source: Item): void {

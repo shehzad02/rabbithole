@@ -36,7 +36,7 @@ class Parser:
     INCLUDE_GRAPH_IN_METADATA: bool
 
     def __init__(self, include_graph_in_metadata=True):
-        """Includes one option for whether adjacencies should be stored in metadata (True), or just in the graph."""
+        """Includes one option for whether edges should also be stored in metadata (True), or just in the graphs."""
 
         self.INCLUDE_GRAPH_IN_METADATA = include_graph_in_metadata
 
