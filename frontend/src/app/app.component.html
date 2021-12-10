@@ -72,7 +72,7 @@
 
 <div class="item-header column">
   <h1 *ngIf="source">Suggested Items to go with "{{ source.title }}"</h1>
-  <h1>The Distance goes here</h1>
+  <h1 *ngIf="levels != -1">Levels of suggestions away is {{ levels }}</h1>
 </div>
 
 <div class="column">

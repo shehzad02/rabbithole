@@ -48,6 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   isChecked: boolean = false;
   searchTime: number = -1;
+  levels: number = -1;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -115,6 +116,12 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
       }
 
+      try {
+        neighbors.length;
+      } catch (error) {
+        continue;
+      }
+
       for (let v = 0; v < neighbors.length; v++) {
         if (!visited.has(neighbors[v])) {
           visited.add(neighbors[v]);
@@ -154,6 +161,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
       q.shift();
       let neighbors : string[] = this.adjGraph.get(u)!;
+      try {
+        neighbors.length;
+      } catch (error) {
+        continue;
+      }
       for (let v = 0; v < neighbors.length; v++) {
         if (!visited.has(neighbors[v])) {
           visited.add(neighbors[v]);
@@ -190,14 +202,53 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   src(event: any) {
     this.sourceDist = event.option.value;
+    this.levels = -1;
   }
 
   dest(event: any) {
     this.destDist = event.option.value;
+    this.levels = -1;
   }
 
   calcDist() {
+    if (!this.sourceDist || !this.destDist) {
+      return;
+    }
 
+    let levels = 1;
+    let q : string[] = [];
+    const visited = new Set();
+
+    visited.add(this.sourceDist.id);
+    q.push(this.sourceDist.id);
+
+    while (q.length > 0) {
+      let levelSize = q.length;
+      while (levelSize-- > 0) {
+        let u = q[0];
+        q.shift();
+        let neighbors : string[] = this.adjGraph.get(u)!;
+
+        try {
+          neighbors.length;
+        } catch (error) {
+          continue;
+        }
+
+        for (let v = 0; v < neighbors.length; v++) {
+          if (!visited.has(neighbors[v])) {
+            if (neighbors[v] == this.destDist.id) {
+              this.levels = levels;
+              return;
+            }
+            visited.add(neighbors[v]);
+            q.push(neighbors[v]);
+          }
+        }
+      }
+      levels++;
+    }
+    this.levels = levels;
   }
 
   viewItem(item: Item) {
@@ -242,8 +293,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         break;
       } 
     }
-    console.log(this.filteredSrc);
-    
   }
 
   filterDest(event: any) {
