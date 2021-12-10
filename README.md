@@ -13,7 +13,7 @@ Extract the contents, which will create a folder called 'data', and place it at 
 The script will look for `./data/Amazon0601.txt` and `./data/amazon-meta.txt`.
 
 ### Step 2
-Run the python script. It will export JSON files into the `./frontend/src/assets'` directory.
+Run the python script. It will export JSON files into the `./frontend/src/assets` directory.
 
 ### Step 3
 Run the "npm install" command from the terminal while inside the `./frontend` directory to install the project's 
