@@ -6,7 +6,6 @@ import * as internal from 'stream';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as forceDirected from "@amcharts/amcharts4/plugins/forceDirected";
-import { QueueScheduler } from 'rxjs/internal/scheduler/QueueScheduler';
 
 
 export interface Item {
@@ -44,6 +43,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   source: any;
 
   isChecked: boolean = false;
+  searchTime: number = 0;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -54,12 +54,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       result.forEach(meta => {
         this.metadata.set(meta[0], meta[1]);
       });
-      let it = [...this.metadata.values()];
-      for (let index = 0; index < 5; index++) {
-        this.filteredOptions.push(it[index]);
-      }
-      // temporary
-      this.suggestions = this.filteredOptions;
       this.loadChart();
     });
 
@@ -80,7 +74,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-      
+    
   }
 
   BFSEdge(source: Item): void {
@@ -106,6 +100,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // q array is the queue: use push to enqueue, shift to dequeue
     // this.suggestions array is used for identifying vertices
+    let startTime = new Date().getTime();
     this.suggestions = [];
 
     let count = 0;
@@ -131,6 +126,8 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
       }
     }
+    let endTime = new Date().getTime();
+    this.searchTime = endTime - startTime;
   }
 
   getOptionDisplay(option: Item) {
@@ -141,9 +138,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     let item: Item = event.option.value;
     this.source = item;
     if (this.isChecked) {
-      this.BFS(item);
+      this.BFSAdj(item);
     } else {
-      this.DFS(item);
+      this.BFSEdge(item);
     }
     this.loadChart();
   }
@@ -151,9 +148,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   viewItem(item: Item) {
     this.source = item;
     if (this.isChecked) {
-      this.BFS(item);
+      this.BFSAdj(item);
     } else {
-      this.DFS(item);
+      this.BFSEdge(item);
     }
     this.loadChart();
   }
@@ -204,13 +201,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     series.dataFields.value = "value";
     series.dataFields.linkWith = "linkWith";
 
-    series.links.template.distance = 2;
+    series.centerStrength = 0.5;
+
+    series.links.template.distance = 3;
+    series.links.template.strength = .5;
+    series.links.template.strokeWidth = 5;
     series.nodes.template.label.text = "{name}";
     series.nodes.template.label.wrap = true;
-    // series.nodes.template.tooltipText = "[bold]{value}[/]";
     series.fontSize = 15;
     series.minRadius = 30;
-    // series.maxRadius = 40;
   }
 
 }
