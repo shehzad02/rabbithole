@@ -20,10 +20,10 @@
   
     </mat-form-field>
   
-    <mat-slide-toggle [(ngModel)]="isChecked" name="toggle">
+    <mat-slide-toggle [(ngModel)]="isChecked" name="toggle" (click)="searchTime = -1">
       <span *ngIf="!isChecked">Edge List</span>
       <span *ngIf="isChecked">Adjacency List</span>
-      <span *ngIf="searchTime != 0"> Time taken to search: {{ searchTime }}ms</span>
+      <span *ngIf="searchTime != -1"><b> Time taken to search: {{ searchTime }}ms</b></span>
     </mat-slide-toggle>
   
   </form>
@@ -72,7 +72,7 @@
 
 <div class="item-header column">
   <h1 *ngIf="source">Suggested Items to go with "{{ source.title }}"</h1>
-  <h2>The Distance goes here</h2>
+  <h1>The Distance goes here</h1>
 </div>
 
 <div class="column">

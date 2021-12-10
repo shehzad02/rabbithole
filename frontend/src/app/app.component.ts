@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   destDist: any;
 
   isChecked: boolean = false;
-  searchTime: number = 0;
+  searchTime: number = -1;
 
   constructor(private httpClient: HttpClient) {}
 
