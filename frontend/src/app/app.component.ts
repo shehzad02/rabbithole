@@ -43,6 +43,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   source: any;
   sourceDist: any;
   destDist: any;
+  filteredSrc: Item[] = [];
+  filteredDest: Item[] = [];
 
   isChecked: boolean = false;
   searchTime: number = -1;
@@ -167,6 +169,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     return option.title;
   }
 
+  getSrcDisplay(option: Item) {
+    return option.title;
+  }
+
+  getDestDisplay(option: Item) {
+    return option.title;
+  }
+
   selection(event: any) {
     let item: Item = event.option.value;
     this.source = item;
@@ -184,6 +194,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   dest(event: any) {
     this.destDist = event.option.value;
+  }
+
+  calcDist() {
+
   }
 
   viewItem(item: Item) {
@@ -206,6 +220,42 @@ export class AppComponent implements OnInit, AfterViewInit {
       if (items[index].title.toLowerCase().includes(value.toLowerCase())) {
         count++;
         this.filteredOptions.push(items[index]);
+      }
+      if (count === 10) {
+        break;
+      } 
+    }
+  }
+
+  filterSrc(event: any) {
+    let value: string = event.target.value;
+    let count = 0;
+    this.filteredSrc = [];
+    let items = [...this.metadata.values()];
+   
+    for (let index = 0; index < items.length; index++) {
+      if (items[index].title.toLowerCase().includes(value.toLowerCase())) {
+        count++;
+        this.filteredSrc.push(items[index]);
+      }
+      if (count === 10) {
+        break;
+      } 
+    }
+    console.log(this.filteredSrc);
+    
+  }
+
+  filterDest(event: any) {
+    let value: string = event.target.value;
+    let count = 0;
+    this.filteredDest = [];
+    let items = [...this.metadata.values()];
+   
+    for (let index = 0; index < items.length; index++) {
+      if (items[index].title.toLowerCase().includes(value.toLowerCase())) {
+        count++;
+        this.filteredDest.push(items[index]);
       }
       if (count === 10) {
         break;

@@ -34,13 +34,13 @@
       <mat-label>Search a Source</mat-label>
       <input type="search"
             placeholder="Search an Item"
-            [matAutocomplete] = "auto"
+            [matAutocomplete] = "autoSrc"
             matInput
-            (input)="filter($event)">
+            (input)="filterSrc($event)">
   
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="src($event)"
-                        [displayWith]="getOptionDisplay">
-        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+      <mat-autocomplete autoActiveFirstOption #autoSrc="matAutocomplete" (optionSelected)="src($event)"
+                        [displayWith]="getSrcDisplay">
+        <mat-option *ngFor="let option of filteredSrc" [value]="option">
           {{ option.title }}
         </mat-option>
       </mat-autocomplete>
@@ -52,13 +52,13 @@
       <mat-label>Search a Destination</mat-label>
       <input type="search"
             placeholder="Search an Item"
-            [matAutocomplete] = "auto"
+            [matAutocomplete] = "autoDest"
             matInput
-            (input)="filter($event)">
+            (input)="filterDest($event)">
   
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="dest($event)"
-                        [displayWith]="getOptionDisplay">
-        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+      <mat-autocomplete autoActiveFirstOption #autoDest="matAutocomplete" (optionSelected)="dest($event)"
+                        [displayWith]="getDestDisplay">
+        <mat-option *ngFor="let option of filteredDest" [value]="option">
           {{ option.title }}
         </mat-option>
       </mat-autocomplete>
@@ -66,7 +66,7 @@
   
     </mat-form-field>
   
-    <button mat-button style="height: 52px;">Find Distance</button>
+    <button mat-button style="height: 52px;" (click)="calcDist()">Find Distance</button>
   </form>
 </div>
 
