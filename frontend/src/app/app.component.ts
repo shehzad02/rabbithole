@@ -41,6 +41,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   filteredOptions: Item[] = [];
   suggestions: Item[] = [];
   source: any;
+  sourceDist: any;
+  destDist: any;
 
   isChecked: boolean = false;
   searchTime: number = 0;
@@ -134,6 +136,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.BFSEdge(item);
     }
     this.loadChart();
+  }
+
+  src(event: any) {
+    this.sourceDist = event.option.value;
+  }
+
+  dest(event: any) {
+    this.destDist = event.option.value;
   }
 
   viewItem(item: Item) {
