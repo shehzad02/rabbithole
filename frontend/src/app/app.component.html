@@ -1,34 +1,78 @@
-<form class="search-bar">
+<div class="column">
+  <form class="search-bar">
 
-  <mat-form-field class="full-width" appearance="fill">
+    <mat-form-field class="full-width" appearance="fill">
+  
+      <mat-label>Search a Book or Music</mat-label>
+      <input type="search"
+            placeholder="Search an Item"
+            [matAutocomplete] = "auto"
+            matInput
+            (input)="filter($event)">
+  
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selection($event)"
+                        [displayWith]="getOptionDisplay">
+        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+          {{ option.title }}
+        </mat-option>
+      </mat-autocomplete>
+  
+  
+    </mat-form-field>
+  
+    <mat-slide-toggle [(ngModel)]="isChecked" name="toggle" (click)="searchTime = -1">
+      <span *ngIf="!isChecked">Edge List</span>
+      <span *ngIf="isChecked">Adjacency List</span>
+      <span *ngIf="searchTime != -1"><b> Time taken to search: {{ searchTime }}ms</b></span>
+    </mat-slide-toggle>
+  
+  </form>
+    
+  <form class="src-dest">
+    <mat-form-field class="bar" appearance="fill">
+  
+      <mat-label>Search a Source</mat-label>
+      <input type="search"
+            placeholder="Search an Item"
+            [matAutocomplete] = "auto"
+            matInput
+            (input)="filter($event)">
+  
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="src($event)"
+                        [displayWith]="getOptionDisplay">
+        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+          {{ option.title }}
+        </mat-option>
+      </mat-autocomplete>
+  
+  
+    </mat-form-field>
+    <mat-form-field class="bar" appearance="fill">
+  
+      <mat-label>Search a Destination</mat-label>
+      <input type="search"
+            placeholder="Search an Item"
+            [matAutocomplete] = "auto"
+            matInput
+            (input)="filter($event)">
+  
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="dest($event)"
+                        [displayWith]="getOptionDisplay">
+        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+          {{ option.title }}
+        </mat-option>
+      </mat-autocomplete>
+  
+  
+    </mat-form-field>
+  
+    <button mat-button style="height: 52px;">Find Distance</button>
+  </form>
+</div>
 
-    <mat-label>Search a Book or Music</mat-label>
-    <input type="search"
-          placeholder="Search an Item"
-          [matAutocomplete] = "auto"
-          matInput
-          (input)="filter($event)">
-
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selection($event)"
-                      [displayWith]="getOptionDisplay">
-      <mat-option *ngFor="let option of filteredOptions" [value]="option">
-        {{ option.title }}
-      </mat-option>
-    </mat-autocomplete>
-
-
-  </mat-form-field>
-
-  <mat-slide-toggle [(ngModel)]="isChecked" name="toggle">
-    <span *ngIf="!isChecked">Edge List</span>
-    <span *ngIf="isChecked">Adjacency List</span>
-    <span *ngIf="searchTime != 0"> Time taken to search: {{ searchTime }}ms</span>
-  </mat-slide-toggle>
-
-</form>
-
-<div class="item-header">
+<div class="item-header column">
   <h1 *ngIf="source">Suggested Items to go with "{{ source.title }}"</h1>
+  <h1>The Distance goes here</h1>
 </div>
 
 <div class="column">

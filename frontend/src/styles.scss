@@ -29,9 +29,22 @@ body {
 }
 
 .mat-button {
-    background-color: rgba($color: #ebebeb, $alpha: 1.0);
+    background-color: rgba($color: #dadada, $alpha: 1.0);
 }
 
 .column {
     display: flex;
+    justify-content: space-between;
+}
+
+.bar {
+    width: 500px;
+}
+
+.src-dest {
+    display: flex;
+    justify-content: space-around;
+    width: 1200px;
+    align-items: flex-start;
+    padding-top: 1rem;
 }
